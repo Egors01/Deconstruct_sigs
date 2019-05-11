@@ -32,7 +32,7 @@ setup(
 
 #
 # setup(name='deconstructsigs',
-#       description='Implementation of DeconstructSigs algorithm for deducing cancer genome mutational signatures',
+#       description='Implementation of DeconstructSigs_old algorithm for deducing cancer genome mutational signatures',
 #       author='Eric Kofman mod Egors',
 #       author_email='',
 #       version='0.1',

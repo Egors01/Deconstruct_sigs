@@ -212,11 +212,11 @@ class DeconstructSigs:
         :return If reference allele is pyrimidine, returns string in format 'ref>alt.' Otherwise, returns string in
         format 'ref_complement_base>alt_complement>base' such that the ref is always a pyrimidine in the return value.
         """
-        if ref in DeconstructSigs2.purines:
+        if ref in DeconstructSigs.purines:
             if alt == "-":
                 print()
-            return '{}>{}'.format(DeconstructSigs2.pair[ref],
-                                  DeconstructSigs2.pair[alt])
+            return '{}>{}'.format(DeconstructSigs.pair[ref],
+                                  DeconstructSigs.pair[alt])
         else:
             return '{}>{}'.format(ref, alt)
 
@@ -230,10 +230,10 @@ class DeconstructSigs:
         otherwise an uppercase representation of the reverse complementary sequence to the given trinucleotide.
         """
         trinuc = trinuc.upper()
-        if trinuc[1] in DeconstructSigs2.purines:
-            return '{}{}{}'.format(DeconstructSigs2.pair[trinuc[2]],
-                                   DeconstructSigs2.pair[trinuc[1]],
-                                   DeconstructSigs2.pair[trinuc[0]])
+        if trinuc[1] in DeconstructSigs.purines:
+            return '{}{}{}'.format(DeconstructSigs.pair[trinuc[2]],
+                                   DeconstructSigs.pair[trinuc[1]],
+                                   DeconstructSigs.pair[trinuc[0]])
         else:
             return trinuc
 

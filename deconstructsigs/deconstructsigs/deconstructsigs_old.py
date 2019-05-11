@@ -17,8 +17,8 @@ from matplotlib import colors as mcolors
 courier_font = FontProperties(family='courier new', weight='bold')
 
 
-class DeconstructSigs:
-    """A Python implementation of the DeconstructSigs algorithm described in
+class DeconstructSigs_old:
+    """A Python implementation of the DeconstructSigs_old algorithm described in
     https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0893-4. Modeled after the R implementation
     coded by Rachel Rosenthal which can be found at https://github.com/raerose01/deconstructSigs.
 
@@ -44,7 +44,7 @@ class DeconstructSigs:
     def __init__(self, mafs_folder=None, maf_file_path=None, context_counts=None, cutoff=0.06, analysis_handle=None,
                  hg19_fasta_path=None, output_folder=None, skip_rows=None):
         """
-        Initialize a DeconstructSigs object.
+        Initialize a DeconstructSigs_old object.
         :param mafs_folder: The path to a folder filled with multiple *.maf files to be used in the analysis
         :param maf_file_path: The path to a single *.maf file to be used in the analysis
         :param context_counts: A dictionary of context counts, with keys in the format 'A[C>A]A' and values integers
@@ -203,7 +203,7 @@ class DeconstructSigs:
         return w
 
     def get_num_samples(self):
-        """Return the number of samples that has been loaded into this DeconstructSigs instance"""
+        """Return the number of samples that has been loaded into this DeconstructSigs_old instance"""
         return self.num_samples
 
     def __add_context_counts_to_subs_dict(self, context_counts):
@@ -482,8 +482,8 @@ class DeconstructSigs:
                 if '-' not in row.Reference_Allele and '-' not in row.Tumor_Seq_Allele2 :
                     substitution = self.__standardize_subs(row.Reference_Allele, row.Tumor_Seq_Allele2)
                     assert (trinuc_context[1] == substitution[0])
-                    assert (substitution[0] in DeconstructSigs.pyrimidines)
-                    assert (trinuc_context[1] in DeconstructSigs.pyrimidines)
+                    assert (substitution[0] in DeconstructSigs_old.pyrimidines)
+                    assert (trinuc_context[1] in DeconstructSigs_old.pyrimidines)
                     addend = 1
                     if weight_for_multiple:
                         addend = 1/num_muts
@@ -523,10 +523,10 @@ class DeconstructSigs:
         :return If reference allele is pyrimidine, returns string in format 'ref>alt.' Otherwise, returns string in
         format 'ref_complement_base>alt_complement>base' such that the ref is always a pyrimidine in the return value.
         """
-        if ref in DeconstructSigs.purines:
+        if ref in DeconstructSigs_old.purines:
             if alt=="-":
                 print()
-            return '{}>{}'.format(DeconstructSigs.pair[ref], DeconstructSigs.pair[alt])
+            return '{}>{}'.format(DeconstructSigs_old.pair[ref], DeconstructSigs_old.pair[alt])
         else:
             return '{}>{}'.format(ref, alt)
 
@@ -540,10 +540,10 @@ class DeconstructSigs:
         otherwise an uppercase representation of the reverse complementary sequence to the given trinucleotide.
         """
         trinuc = trinuc.upper()
-        if trinuc[1] in DeconstructSigs.purines:
-            return '{}{}{}'.format(DeconstructSigs.pair[trinuc[2]],
-                                   DeconstructSigs.pair[trinuc[1]],
-                                   DeconstructSigs.pair[trinuc[0]])
+        if trinuc[1] in DeconstructSigs_old.purines:
+            return '{}{}{}'.format(DeconstructSigs_old.pair[trinuc[2]],
+                                   DeconstructSigs_old.pair[trinuc[1]],
+                                   DeconstructSigs_old.pair[trinuc[0]])
         else:
             return trinuc
 
