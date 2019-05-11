@@ -47,7 +47,10 @@ class DeconstructSigs:
         Initialize a DeconstructSigs2 object.
 
         """
+        assert  type(m96vector) == np.array
+        assert len(m96vector) == 96
         self.m96_vector = m96vector
+
 
         self.threshold = threshold
 

@@ -26,6 +26,7 @@ extra_files =package_files(os.path.dirname(os.path.realpath(__file__)))
 
 with open('requirements.txt', 'r') as requirements_file:
     install_requires = requirements_file.read().splitlines()
+
 setup(
     name='deconstructsigs',
     version='0.5',
