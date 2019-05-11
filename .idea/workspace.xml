@@ -2,18 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2d17791b-9765-4df8-ba90-644d9d27d61d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../deconstruct_sigs/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../deconstruct_sigs/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../deconstruct_sigs/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../deconstruct_sigs/deconstructsigs/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../deconstruct_sigs/deconstructsigs/data/about_cosmic_sigs.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../deconstruct_sigs/deconstructsigs/data/signatures_probabilities.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../deconstruct_sigs/deconstructsigs/module/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../deconstruct_sigs/deconstructsigs/module/deconstructsigs.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../deconstruct_sigs/deconstructsigs/module/deconstructsigs_old.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../deconstruct_sigs/deconstructsigs/requirements.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../deconstruct_sigs/deconstructsigs/tests/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../deconstruct_sigs/deconstructsigs/tests/tests.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../deconstruct_sigs/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/../deconstruct_sigs/setup.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../deconstruct_sigs/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../deconstruct_sigs/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -89,8 +78,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../deconstruct_sigs/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-364">
-              <caret line="1" column="8" selection-start-line="1" selection-start-column="8" selection-end-line="1" selection-end-column="8" />
+            <state relative-caret-position="296">
+              <caret line="31" column="11" lean-forward="true" selection-start-line="31" selection-start-column="11" selection-end-line="31" selection-end-column="11" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -187,10 +179,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="81" />
-    <option name="y" value="65" />
-    <option name="width" value="1839" />
-    <option name="height" value="1015" />
+    <option name="x" value="58" />
+    <option name="y" value="139" />
+    <option name="width" value="1835" />
+    <option name="height" value="1027" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -517,7 +509,7 @@
       <workItem from="1557150804264" duration="10551000" />
       <workItem from="1557583017625" duration="4273000" />
       <workItem from="1557588369884" duration="3100000" />
-      <workItem from="1557593433264" duration="2661000" />
+      <workItem from="1557593433264" duration="3549000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1557590146731</created>
@@ -540,14 +532,29 @@
       <option name="project" value="LOCAL" />
       <updated>1557595714908</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="updated structure">
+      <created>1557596114546</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1557596114546</updated>
+    </task>
+    <task id="LOCAL-00005" summary="updated structure 2">
+      <created>1557596183153</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1557596183153</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="38246000" />
+    <option name="totallyTimeSpent" value="39134000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="81" y="-5" width="1839" height="1085" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23892316" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -613,13 +620,15 @@
     <option name="version" value="1" />
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
       <path value="$PROJECT_DIR$/../Deconstruct_sigs" />
     </ignored-roots>
     <MESSAGE value="Initial commit" />
     <MESSAGE value="updated structure" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated structure" />
+    <MESSAGE value="updated structure 2" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated structure 2" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1002,8 +1011,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../deconstruct_sigs/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-364">
-          <caret line="1" column="8" selection-start-line="1" selection-start-column="8" selection-end-line="1" selection-end-column="8" />
+        <state relative-caret-position="296">
+          <caret line="31" column="11" lean-forward="true" selection-start-line="31" selection-start-column="11" selection-end-line="31" selection-end-column="11" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
