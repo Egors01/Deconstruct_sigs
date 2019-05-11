@@ -479,14 +479,15 @@ class DeconstructSigs:
         for (idx, row) in df.iterrows():
             trinuc_context = self.__get_snp_trinuc_context(row)
             if trinuc_context:
-                substitution = self.__standardize_subs(row.Reference_Allele, row.Tumor_Seq_Allele2)
-                assert (trinuc_context[1] == substitution[0])
-                assert (substitution[0] in DeconstructSigs.pyrimidines)
-                assert (trinuc_context[1] in DeconstructSigs.pyrimidines)
-                addend = 1
-                if weight_for_multiple:
-                    addend = 1/num_muts
-                self.subs_dict[substitution][trinuc_context] += addend
+                if '-' not in row.Reference_Allele and '-' not in row.Tumor_Seq_Allele2 :
+                    substitution = self.__standardize_subs(row.Reference_Allele, row.Tumor_Seq_Allele2)
+                    assert (trinuc_context[1] == substitution[0])
+                    assert (substitution[0] in DeconstructSigs.pyrimidines)
+                    assert (trinuc_context[1] in DeconstructSigs.pyrimidines)
+                    addend = 1
+                    if weight_for_multiple:
+                        addend = 1/num_muts
+                    self.subs_dict[substitution][trinuc_context] += addend
         self.num_samples += 1
 
     def __get_snp_trinuc_context(self, df_row):
@@ -498,11 +499,8 @@ class DeconstructSigs:
                 return None
             trinuc_context = self.__standardize_trinuc(self.__get_trinuc_context_from_fasta(df_row))
         else:
-            ref_context = df_row.ref_context  # context is the ref flanked by 10 bp on both the 5' and 3' sides
-            if len(ref_context) != 21:
-                # Only consider SNPs (ignoring DNPs, and TNPs, which would have 22 and 23 context length respectively)
-                return None
-            trinuc_context = self.__standardize_trinuc(ref_context[9:12])
+            ref_context = df_row.CONTEXT  # context is the ref flanked by 10 bp on both the 5' and 3' sides
+        trinuc_context = self.__standardize_trinuc(df_row.CONTEXT[4:7])
         return trinuc_context
 
     def __get_trinuc_context_from_fasta(self, df_row):
@@ -526,6 +524,8 @@ class DeconstructSigs:
         format 'ref_complement_base>alt_complement>base' such that the ref is always a pyrimidine in the return value.
         """
         if ref in DeconstructSigs.purines:
+            if alt=="-":
+                print()
             return '{}>{}'.format(DeconstructSigs.pair[ref], DeconstructSigs.pair[alt])
         else:
             return '{}>{}'.format(ref, alt)

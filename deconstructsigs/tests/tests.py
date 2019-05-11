@@ -4,7 +4,7 @@ import pandas as pd
 import os
 import re
 from collections import defaultdict
-from deconstructSigs.deconstructSigs import DeconstructSigs
+from deconstructsigs.OldDeconstructSigs.deconstructSigs import DeconstructSigs
 
 
 class TestDeconstructSigs(unittest.TestCase):

@@ -24,7 +24,7 @@ RUN conda update conda -y
 WORKDIR /
 
 COPY use_deconstructsigs.py /
-COPY deconstructSigs/ /deconstructSigs/
+COPY deconstructsigs /deconstructSigs/
 
 RUN mkdir outputs
 
