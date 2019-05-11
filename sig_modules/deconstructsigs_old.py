@@ -5,6 +5,7 @@ import os
 import datetime as dt
 import pandas as pd
 import matplotlib.pyplot as plt
+
 plt.style.use('ggplot')
 from collections import defaultdict
 import itertools
@@ -14,6 +15,7 @@ from scipy.optimize import minimize_scalar
 from matplotlib.font_manager import FontProperties
 import subprocess
 from matplotlib import colors as mcolors
+
 courier_font = FontProperties(family='courier new', weight='bold')
 
 
@@ -41,7 +43,8 @@ class DeconstructSigs_old:
     # purine bases
     purines = ['G', 'A']
 
-    def __init__(self, mafs_folder=None, maf_file_path=None, context_counts=None, cutoff=0.06, analysis_handle=None,
+    def __init__(self, mafs_folder=None, maf_file_path=None,
+                 context_counts=None, cutoff=0.06, analysis_handle=None,
                  hg19_fasta_path=None, output_folder=None, skip_rows=None):
         """
         Initialize a DeconstructSigs_old object.
@@ -60,22 +63,27 @@ class DeconstructSigs_old:
         self.timestamp = dt.datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
 
         if self.maf_filepath and self.mafs_folder:
-            raise Exception("Please only provide one of maf_filepath or mafs_folder arguments")
+            raise Exception(
+                "Please only provide one of maf_filepath or mafs_folder arguments")
 
         self.verbose = False
         self.signature_cutoff = cutoff
         self.analysis_handle = analysis_handle
         if not self.analysis_handle:
             if self.maf_filepath:
-                self.analysis_handle = os.path.split(self.maf_filepath)[-1].split('.')[0]
+                self.analysis_handle = \
+                os.path.split(self.maf_filepath)[-1].split('.')[0]
             else:
                 self.analysis_handle = 'analysis'
 
         self.hg19_fasta_path = hg19_fasta_path
 
-        package_path = os.path.join(os.path.dirname(os.path.realpath(__file__)),os.path.pardir)
-        self.cosmic_signatures_filepath = os.path.join(package_path, 'data/signatures_probabilities.txt')
-        self.cosmic_signature_explanations_filepath = os.path.join(package_path, 'data/about_cosmic_sigs.txt')
+        package_path = os.path.join(
+            os.path.dirname(os.path.realpath(__file__)), os.path.pardir)
+        self.cosmic_signatures_filepath = os.path.join(package_path,
+                                                       'data/signatures_probabilities.txt')
+        self.cosmic_signature_explanations_filepath = os.path.join(
+            package_path, 'data/about_cosmic_sigs.txt')
 
         self.__setup_subs_dict()
         self.__load_cosmic_signatures()
@@ -84,7 +92,9 @@ class DeconstructSigs_old:
         # Remove unnecessary columns from the cosmic signatures data and make the S matrix. Note: the substitution
         # contexts are in alphabetical order (A[C>A]A, A[C>A]C, A[C>A]G, A[C>A]T, A[C>G]A, A[C>G]C... etc.)
         self.S = np.array(self.cosmic_signatures.select(
-            lambda x: not re.search("(Substitution Type)|(Trinucleotide)|(Somatic Mutation Type)|(Unnamed)", x),
+            lambda x: not re.search(
+                "(Substitution Type)|(Trinucleotide)|(Somatic Mutation Type)|(Unnamed)",
+                x),
             axis=1))
 
         if context_counts is None:
@@ -92,52 +102,74 @@ class DeconstructSigs_old:
         else:
             self.__add_context_counts_to_subs_dict(context_counts)
 
-        self.signature_names = ['Signature 1', 'Signature 2', 'Signature 3', 'Signature 4', 'Signature 5',
-                                'Signature 6', 'Signature 7', 'Signature 8', 'Signature 9', 'Signature 10',
-                                'Signature 11', 'Signature 12', 'Signature 13', 'Signature 14', 'Signature 15',
-                                'Signature 16', 'Signature 17', 'Signature 18', 'Signature 19', 'Signature 20',
-                                'Signature 21', 'Signature 22', 'Signature 23', 'Signature 24', 'Signature 25',
-                                'Signature 26', 'Signature 27', 'Signature 28', 'Signature 29', 'Signature 30']
+        self.signature_names = ['Signature 1', 'Signature 2', 'Signature 3',
+                                'Signature 4', 'Signature 5',
+                                'Signature 6', 'Signature 7', 'Signature 8',
+                                'Signature 9', 'Signature 10',
+                                'Signature 11', 'Signature 12', 'Signature 13',
+                                'Signature 14', 'Signature 15',
+                                'Signature 16', 'Signature 17', 'Signature 18',
+                                'Signature 19', 'Signature 20',
+                                'Signature 21', 'Signature 22', 'Signature 23',
+                                'Signature 24', 'Signature 25',
+                                'Signature 26', 'Signature 27', 'Signature 28',
+                                'Signature 29', 'Signature 30']
 
     def figures(self, weights, explanations=False):
         self.plot_pie_chart(weights, explanations=explanations)
 
         if self.output_folder:
-            plt.savefig(os.path.join(self.output_folder, '{}_deconstructsigs_pie.png'.format(
-                self.analysis_handle)), bbox_inches='tight')
+            plt.savefig(os.path.join(self.output_folder,
+                                     '{}_deconstructsigs_pie.png'.format(
+                                         self.analysis_handle)),
+                        bbox_inches='tight')
 
         # Plot the sample profile and figure out what the optimal maximum y-value is for a good plot based on this
         y_max = self.plot_sample_profile()
         if self.output_folder:
-            plt.savefig(os.path.join(self.output_folder, '{}_deconstructsigs_sample_profile.png'.format(
-                self.analysis_handle)), bbox_inches='tight')
+            plt.savefig(os.path.join(self.output_folder,
+                                     '{}_deconstructsigs_sample_profile.png'.format(
+                                         self.analysis_handle)),
+                        bbox_inches='tight')
 
         # Plot the reconstructed tumor profile using the weights provided
-        reconstructed_profile = self.__plot_reconstructed_profile(weights, y_max=y_max)
+        reconstructed_profile = self.__plot_reconstructed_profile(weights,
+                                                                  y_max=y_max)
         if self.output_folder:
-            plt.savefig(os.path.join(self.output_folder, '{}_deconstructsigs_reconstructed_profile.png'.format(
-                self.analysis_handle)), bbox_inches='tight')
+            plt.savefig(os.path.join(self.output_folder,
+                                     '{}_deconstructsigs_reconstructed_profile.png'.format(
+                                         self.analysis_handle)),
+                        bbox_inches='tight')
 
         # Plot the differences between the original and reconstructed profile
         self.__plot_difference(reconstructed_profile, y_max)
         if self.output_folder:
-            plt.savefig(os.path.join(self.output_folder, '{}_deconstructsigs_differences.png'.format(
-                self.analysis_handle)), bbox_inches='tight')
+            plt.savefig(os.path.join(self.output_folder,
+                                     '{}_deconstructsigs_differences.png'.format(
+                                         self.analysis_handle)),
+                        bbox_inches='tight')
 
         if not self.output_folder:
             plt.show()
 
     def plot_pie_chart(self, weights, explanations=False):
-        all_colors = {self.signature_names[i]: list(mcolors.CSS4_COLORS.values())[30:][i] for i in range(len(self.signature_names))}
-        signature_weights = zip(self.signature_names, self.cosmic_signature_explanations.Association, weights)
+        all_colors = {
+            self.signature_names[i]: list(mcolors.CSS4_COLORS.values())[30:][i]
+            for i in range(len(self.signature_names))}
+        signature_weights = zip(self.signature_names,
+                                self.cosmic_signature_explanations.Association,
+                                weights)
         # Data to plot
         non_zero_weights = []
         non_zero_labels = []
         colors = []
-        for cosmic_signature, cosmic_explanation, weight in sorted(signature_weights, key=lambda t: t[2], reverse=True):
+        for cosmic_signature, cosmic_explanation, weight in sorted(
+                signature_weights, key=lambda t: t[2], reverse=True):
             if weight != 0:
                 if explanations:
-                    label = '{}, {}%\n({})'.format(cosmic_signature, round(weight*100, 2), cosmic_explanation)
+                    label = '{}, {}%\n({})'.format(cosmic_signature,
+                                                   round(weight * 100, 2),
+                                                   cosmic_explanation)
                 else:
                     label = '{}'.format(cosmic_signature)
                 color = all_colors[cosmic_signature]
@@ -151,9 +183,11 @@ class DeconstructSigs_old:
         # Fill in the missing piece of the pie (due to removed below-threshold signatures)
         if 1 - sum(non_zero_weights) > 1e-3:
             difference = 1 - sum(non_zero_weights)
-            percentage = round(difference*100, 2)
+            percentage = round(difference * 100, 2)
             if explanations:
-                non_zero_labels.append('Other Signatures Below Significance Threshold, {}%'.format(percentage))
+                non_zero_labels.append(
+                    'Other Signatures Below Significance Threshold, {}%'.format(
+                        percentage))
             else:
                 non_zero_labels.append('Other')
             non_zero_weights.append(difference)
@@ -173,24 +207,28 @@ class DeconstructSigs_old:
             ax2.legend(pie[0], non_zero_labels, loc="center")
         else:
             # Simply place the labels and percentages on the pie chart itself
-            plt.pie(non_zero_weights, labels=non_zero_labels, autopct='%1.0f%%', labeldistance=1.05, colors=colors)
+            plt.pie(non_zero_weights, labels=non_zero_labels,
+                    autopct='%1.0f%%', labeldistance=1.05, colors=colors)
             plt.title(title)
             plt.axis('equal')
 
         fig.canvas.set_window_title(title)
 
-    def which_signatures(self, signatures_limit=None, associated=None, verbose=False):
+    def which_signatures(self, signatures_limit=None, associated=None,
+                         verbose=False):
         """Wrapper on __which_signatures function. Calls __which_signatures, then outputs a csv file with
         user-provided name containing the calculated normalized weights for each of the signatures. If a vector
         of associated indices is provided, only consider the weights at the indicated indices"""
         # Turn on verbosity if user indicates verbose=True
         self.verbose = verbose
-        w = self.__which_signatures(signatures_limit=signatures_limit, associated=associated)
+        w = self.__which_signatures(signatures_limit=signatures_limit,
+                                    associated=associated)
 
         # Generate signature weight outputs
         if self.output_folder:
-            f = open(os.path.join(self.output_folder, '{}_deconstructsigs_signature_weights.csv'.format(
-                self.analysis_handle)), 'xt')
+            f = open(os.path.join(self.output_folder,
+                                  '{}_deconstructsigs_signature_weights.csv'.format(
+                                      self.analysis_handle)), 'xt')
             for signature in self.signature_names:
                 f.write('{},'.format(signature))
             f.write('\n')
@@ -223,18 +261,21 @@ class DeconstructSigs_old:
         for subs, contexts in self.subs_dict.items():
             for context in sorted(contexts):
                 count = self.subs_dict[subs][context]
-                somatic_mutation_counts['{}[{}]{}'.format(context[0], subs, context[2])] = count
+                somatic_mutation_counts[
+                    '{}[{}]{}'.format(context[0], subs, context[2])] = count
         total_counts = sum(somatic_mutation_counts.values())
 
         contexts_not_present_in_tumor = [sm for sm in somatic_mutation_counts
-                                        if somatic_mutation_counts[sm]/total_counts < 0.01]
+                                         if somatic_mutation_counts[
+                                             sm] / total_counts < 0.01]
 
         signatures_to_ignore = []
         for i, signature_name in enumerate(self.signature_names):
             context_fractions = self.cosmic_signatures[signature_name]
             for j, cf in enumerate(context_fractions):
                 if cf > 0.2:
-                    somatic_mutation_type = self.cosmic_signatures['Somatic Mutation Type'][j]
+                    somatic_mutation_type = \
+                    self.cosmic_signatures['Somatic Mutation Type'][j]
                     if somatic_mutation_type in contexts_not_present_in_tumor:
                         signatures_to_ignore.append({'name': signature_name,
                                                      'index': i,
@@ -255,14 +296,16 @@ class DeconstructSigs_old:
         ignorable_signatures = self.__calculate_ignorable_signatures()
         self.__status('Signatures ignored because of outlying contexts:')
         for s in ignorable_signatures:
-            self.__status('\t{} ignored because of outlying context {} with fraction {}'
-                          .format(s.get('name'),
-                                  s.get('outlier_context'),
-                                  s.get('context_fraction')))
+            self.__status(
+                '\t{} ignored because of outlying context {} with fraction {}'
+                .format(s.get('name'),
+                        s.get('outlier_context'),
+                        s.get('context_fraction')))
 
         ignorable_indices = [ig['index'] for ig in ignorable_signatures]
         if associated:
-            all_not_associated = [index for index in range(len(self.S[0])) if index not in associated]
+            all_not_associated = [index for index in range(len(self.S[0])) if
+                                  index not in associated]
             ignorable_indices.extend(all_not_associated)
         iteration = 0
         _, _, flat_counts = self.__get_alphabetical_flat_bins_and_counts()
@@ -281,7 +324,8 @@ class DeconstructSigs_old:
             error_pre = self.__get_error(T, self.S, w)
             if error_pre == 0:
                 break
-            self.__status("Iter {}:\n\tPre error: {}".format(iteration, error_pre))
+            self.__status(
+                "Iter {}:\n\tPre error: {}".format(iteration, error_pre))
             w = self.__update_weights(T, self.S, w,
                                       signatures_limit=signatures_limit,
                                       ignorable_signature_indices=ignorable_indices)
@@ -291,10 +335,11 @@ class DeconstructSigs_old:
             self.__status("\tNew normalized weights: ")
             self.__print_normalized_weights(w)
 
-        normalized_weights = w/sum(w)
+        normalized_weights = w / sum(w)
 
         # Filter out any weights less than 0.6
-        np.place(normalized_weights, normalized_weights < self.signature_cutoff, 0)
+        np.place(normalized_weights,
+                 normalized_weights < self.signature_cutoff, 0)
         return normalized_weights
 
     def __print_normalized_weights(self, w):
@@ -302,14 +347,15 @@ class DeconstructSigs_old:
         normalized_weights = w / sum(w)
         for i, weight in enumerate(normalized_weights):
             if weight != 0:
-                self.__status("\t\t{}: {}".format(self.signature_names[i], weight))
+                self.__status(
+                    "\t\t{}: {}".format(self.signature_names[i], weight))
 
     def plot_sample_profile(self):
         """Plot the substitution context profile for the original tumor sample given. Return the maximum y value on the
         y-axis in order to generate an appropriately scaled plot."""
         _, flat_bins, flat_counts = self.__get_plottable_flat_bins_and_counts()
         total_counts = sum(flat_counts)
-        fractions = [c/total_counts for c in flat_counts]
+        fractions = [c / total_counts for c in flat_counts]
         y_max = max(fractions) * 1.05
 
         title = 'Tumor Profile'
@@ -337,25 +383,30 @@ class DeconstructSigs_old:
 
     def __plot_reconstructed_profile(self, weights, y_max=1):
         """Given a set of weights for each signature plot the reconstructed tumor profile using the cosmic signatures"""
-        reconstructed_tumor_profile = self.__get_reconstructed_tumor_profile(self.S, weights)
+        reconstructed_tumor_profile = self.__get_reconstructed_tumor_profile(
+            self.S, weights)
 
         # Reorder context counts, which were calculated using alphabetically sorted mutation contexts, to match the
         # format that the plotting function expects, where they are ordered alphabetically first by substitution type.
         alpha_flat_subs, _, alpha_flat_counts = self.__get_alphabetical_flat_bins_and_counts()
         reconstructed_counts_dict = defaultdict()
         for i, subs_type in enumerate(alpha_flat_subs):
-            reconstructed_counts_dict[subs_type] = reconstructed_tumor_profile[i]
+            reconstructed_counts_dict[subs_type] = reconstructed_tumor_profile[
+                i]
         reconstructed_tumor_counts = []
         flat_subs, flat_bins, _ = self.__get_plottable_flat_bins_and_counts()
         for subs_type in flat_subs:
-            reconstructed_tumor_counts.append(reconstructed_counts_dict[subs_type])
+            reconstructed_tumor_counts.append(
+                reconstructed_counts_dict[subs_type])
         title = 'Reconstructed Tumor Profile'
         if self.analysis_handle:
             title = '{} for {}'.format(title, self.analysis_handle)
-        self.__plot_counts(flat_bins, reconstructed_tumor_counts, y_max=y_max, title=title)
+        self.__plot_counts(flat_bins, reconstructed_tumor_counts, y_max=y_max,
+                           title=title)
         return reconstructed_tumor_counts
 
-    def __plot_counts(self, flat_bins, flat_counts, title='Figure', y_max=1.0, y_min=0.0):
+    def __plot_counts(self, flat_bins, flat_counts, title='Figure', y_max=1.0,
+                      y_min=0.0):
         """Plot substitution fraction per mutation context"""
         # Set up several subplots
         fig, axes = plt.subplots(nrows=1, ncols=6, figsize=(20, 5.5))
@@ -363,7 +414,8 @@ class DeconstructSigs_old:
         fig.suptitle(title, fontsize=14)
 
         # Set up some colors and markers to cycle through...
-        colors = itertools.cycle(['#22bbff', 'k', 'r', '.6', '#88cc44', '#ffaaaa'])
+        colors = itertools.cycle(
+            ['#22bbff', 'k', 'r', '.6', '#88cc44', '#ffaaaa'])
 
         graph = 0
         for ax, data, color in zip(axes, [1, 2, 3, 4, 5, 6], colors):
@@ -373,18 +425,22 @@ class DeconstructSigs_old:
             # Labels for the rectangles
             new_ticks = flat_bins[0 + graph * 16:16 + graph * 16]
             start, end = ax.get_xlim()
-            ax.xaxis.set_ticks(np.arange(start, end, (end - start) / 16.5) + .85)
+            ax.xaxis.set_ticks(
+                np.arange(start, end, (end - start) / 16.5) + .85)
             ax.xaxis.set_major_formatter(ticker.FixedFormatter(new_ticks))
-            plt.setp(ax.xaxis.get_majorticklabels(), rotation=90, font_properties=courier_font, color='k')
+            plt.setp(ax.xaxis.get_majorticklabels(), rotation=90,
+                     font_properties=courier_font, color='k')
             # Standardize y-axis ranges across subplots (in percentage units)
             ax.set_ylim([y_min, y_max])
             vals = ax.get_yticks()
             ax.set_yticklabels(['{:3.0f}%'.format(val * 100) for val in vals])
-            plt.setp(ax.yaxis.get_majorticklabels(), color='k', fontweight='bold')
+            plt.setp(ax.yaxis.get_majorticklabels(), color='k',
+                     fontweight='bold')
             graph += 1
 
         # Set labels
-        axes[0].set_ylabel('Mutation Type Probability', fontweight='bold', color='k')
+        axes[0].set_ylabel('Mutation Type Probability', fontweight='bold',
+                           color='k')
         labels = sorted(self.subs_dict.keys())
         for ax, label in zip(axes, labels):
             ax.set_xlabel(label, fontweight='bold', color='k', size=13)
@@ -417,7 +473,8 @@ class DeconstructSigs_old:
             for context in sorted(context_counts):
                 flat_bins.append(context)
                 flat_counts.append(context_counts[context])
-                flat_subs.append('{}[{}]{}'.format(context[0], subs, context[2]))
+                flat_subs.append(
+                    '{}[{}]{}'.format(context[0], subs, context[2]))
         return flat_subs, flat_bins, flat_counts
 
     def __get_alphabetical_flat_bins_and_counts(self):
@@ -425,7 +482,8 @@ class DeconstructSigs_old:
         context_dict = defaultdict()
         for subs, context_counts in self.subs_dict.items():
             for context in context_counts:
-                context_dict['{}[{}]{}'.format(context[0], subs, context[2])] = context_counts[context]
+                context_dict['{}[{}]{}'.format(context[0], subs, context[2])] = \
+                context_counts[context]
 
         flat_bins = []
         flat_counts = []
@@ -455,18 +513,22 @@ class DeconstructSigs_old:
     def __load_cosmic_signatures(self):
         """Load cosmic signatures file. Note that the mutation contexts are listed in alphabetical order:
         (A[C>A]A, A[C>A]C, A[C>A]G, A[C>A]T, A[C>G]A, A[C>G]C... etc.) """
-        self.cosmic_signatures = pd.read_csv('{}'.format(self.cosmic_signatures_filepath), sep='\t', engine='python')
+        self.cosmic_signatures = pd.read_csv(
+            '{}'.format(self.cosmic_signatures_filepath), sep='\t',
+            engine='python')
 
     def __load_cosmic_signature_explanations(self):
         """Load about_cosmic_sigs.txt file, which contains correlations and proposed etiologies for the cosmic
         signatures."""
-        self.cosmic_signature_explanations = pd.read_csv('{}'.format(self.cosmic_signature_explanations_filepath),
-                                                         sep='\t', engine='python')
+        self.cosmic_signature_explanations = pd.read_csv(
+            '{}'.format(self.cosmic_signature_explanations_filepath),
+            sep='\t', engine='python')
 
     def __load_mafs(self):
         """Load all *.maf files found in the directory provided"""
         if self.mafs_folder:
-            for filename in [n for n in os.listdir(self.mafs_folder) if n.endswith('maf')]:
+            for filename in [n for n in os.listdir(self.mafs_folder) if
+                             n.endswith('maf')]:
                 file_path = '{}/{}'.format(self.mafs_folder, filename)
                 self.__load_maf(file_path, weight_for_multiple=True)
         elif self.maf_filepath:
@@ -474,19 +536,22 @@ class DeconstructSigs_old:
 
     def __load_maf(self, file_path, weight_for_multiple=False):
         """Load a MAF file's trinucleotide counts for each type of substitution"""
-        df = pd.read_csv(file_path, sep='\t', engine='python', skiprows=self.skip_rows)
+        df = pd.read_csv(file_path, sep='\t', engine='python',
+                         skiprows=self.skip_rows)
         num_muts = len(df)
         for (idx, row) in df.iterrows():
             trinuc_context = self.__get_snp_trinuc_context(row)
             if trinuc_context:
-                if '-' not in row.Reference_Allele and '-' not in row.Tumor_Seq_Allele2 :
-                    substitution = self.__standardize_subs(row.Reference_Allele, row.Tumor_Seq_Allele2)
+                if '-' not in row.Reference_Allele and '-' not in row.Tumor_Seq_Allele2:
+                    substitution = self.__standardize_subs(
+                        row.Reference_Allele, row.Tumor_Seq_Allele2)
                     assert (trinuc_context[1] == substitution[0])
                     assert (substitution[0] in DeconstructSigs_old.pyrimidines)
-                    assert (trinuc_context[1] in DeconstructSigs_old.pyrimidines)
+                    assert (trinuc_context[
+                                1] in DeconstructSigs_old.pyrimidines)
                     addend = 1
                     if weight_for_multiple:
-                        addend = 1/num_muts
+                        addend = 1 / num_muts
                     self.subs_dict[substitution][trinuc_context] += addend
         self.num_samples += 1
 
@@ -497,7 +562,8 @@ class DeconstructSigs_old:
             if df_row.Start_position != df_row.End_position:
                 # We are only considering SNPs so start position and end position should be the same
                 return None
-            trinuc_context = self.__standardize_trinuc(self.__get_trinuc_context_from_fasta(df_row))
+            trinuc_context = self.__standardize_trinuc(
+                self.__get_trinuc_context_from_fasta(df_row))
         else:
             ref_context = df_row.CONTEXT  # context is the ref flanked by 10 bp on both the 5' and 3' sides
         trinuc_context = self.__standardize_trinuc(df_row.CONTEXT[4:7])
@@ -507,7 +573,10 @@ class DeconstructSigs_old:
         """Fetch the trinucleotide context for a mutation given a row from a MAF file."""
         chromosome = df_row.Chromosome
         position = int(df_row.Start_position)
-        bashcommand = 'samtools faidx {} {}:{}-{}'.format(self.hg19_fasta_path, chromosome, position-1, position+1)
+        bashcommand = 'samtools faidx {} {}:{}-{}'.format(self.hg19_fasta_path,
+                                                          chromosome,
+                                                          position - 1,
+                                                          position + 1)
         process = subprocess.Popen(bashcommand.split(), stdout=subprocess.PIPE)
         output, error = process.communicate()
 
@@ -524,9 +593,10 @@ class DeconstructSigs_old:
         format 'ref_complement_base>alt_complement>base' such that the ref is always a pyrimidine in the return value.
         """
         if ref in DeconstructSigs_old.purines:
-            if alt=="-":
+            if alt == "-":
                 print()
-            return '{}>{}'.format(DeconstructSigs_old.pair[ref], DeconstructSigs_old.pair[alt])
+            return '{}>{}'.format(DeconstructSigs_old.pair[ref],
+                                  DeconstructSigs_old.pair[alt])
         else:
             return '{}>{}'.format(ref, alt)
 
@@ -550,7 +620,7 @@ class DeconstructSigs_old:
     @staticmethod
     def __get_reconstructed_tumor_profile(signatures, w):
         """Reconstruct a tumor profile given a set of signatures and a vector of signature weights"""
-        w_norm = w/sum(w)
+        w_norm = w / sum(w)
         return w_norm.dot(np.transpose(signatures))
 
     def __get_error(self, tumor, signatures, w):
@@ -562,13 +632,15 @@ class DeconstructSigs_old:
         :param w: array of shape (num_signatures, 1) representing weight of each signature
         :return: sum of squares error between reconstructed tumor context fractions and actual tumor profile
         """
-        tumor = tumor/sum(tumor)
-        reconstructed_tumor_profile = self.__get_reconstructed_tumor_profile(signatures, w)
+        tumor = tumor / sum(tumor)
+        reconstructed_tumor_profile = self.__get_reconstructed_tumor_profile(
+            signatures, w)
         error = tumor - reconstructed_tumor_profile
         squared_error_sum = np.sum(error.dot(np.transpose(error)))
         return squared_error_sum
 
-    def __update_weights(self, tumor, signatures, w, signatures_limit, ignorable_signature_indices=None):
+    def __update_weights(self, tumor, signatures, w, signatures_limit,
+                         ignorable_signature_indices=None):
         """
         Given a set of initial weights, update the weights array with new values that shrink the sum of squares
         error metric.
@@ -598,7 +670,8 @@ class DeconstructSigs_old:
         else:
             # Work with signatures already present if we have reached maximum number of contributing signatures allowed
             changeable_indices = np.nonzero(w)[0]
-        changeable_indices = [i for i in changeable_indices if i not in ignorable_signature_indices]
+        changeable_indices = [i for i in changeable_indices if
+                              i not in ignorable_signature_indices]
 
         # zero square matrix of num signatures dimensions
         v = np.zeros((num_sigs, num_sigs))
@@ -616,7 +689,8 @@ class DeconstructSigs_old:
                 tmp[0, i] = x
                 return self.__get_error(tumor, signatures, w + tmp[0,])
 
-            error_minimizer = minimize_scalar(to_minimize, bounds=(-w[i], 1), method="bounded").x
+            error_minimizer = minimize_scalar(to_minimize, bounds=(-w[i], 1),
+                                              method="bounded").x
             v[i, i] = error_minimizer
             w_new = w + v[i]
             new_squared_errors[i] = self.__get_error(tumor, signatures, w_new)

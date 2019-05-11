@@ -42,7 +42,7 @@ class DeconstructSigs:
 
     def __init__(self, m96vector, use_cosmic=True, signatures_df=None,
                  annotation_df=None, cutoff=0.06, analysis_handle='testing',
-                verbose=False,threshold = 1e-3):
+                 verbose=False, threshold=1e-3):
         """
         Initialize a DeconstructSigs2 object.
 
@@ -54,7 +54,8 @@ class DeconstructSigs:
         self.signature_cutoff = cutoff
         self.analysis_handle = analysis_handle
 
-        package_path = os.path.dirname(os.path.realpath(__file__))
+        package_path = os.path.join(
+            os.path.dirname(os.path.realpath(__file__)), os.path.pardir)
         self.cosmic_signatures_filepath = os.path.join(package_path,
                                                        'data/signatures_probabilities.txt')
         self.cosmic_signature_explanations_filepath = os.path.join(
@@ -70,7 +71,7 @@ class DeconstructSigs:
             self.__load_cosmic_signature_explanations()
         else:
             if isinstance(signatures_df, pd.DataFrame):
-                if signatures_df.isna():
+                if signatures_df.isna().any().any():
                     raise ValueError('bad sig dataframe ')
             self.pre_defined_signatures = signatures_df
             if annotation_df:
@@ -115,7 +116,6 @@ class DeconstructSigs:
                                     associated=associated)
         self.final_result_weights = w
         return w
-
 
     def __which_signatures(self, signatures_limit=None, associated=None):
         """Get the weights transformation vector. If a vector
@@ -169,7 +169,6 @@ class DeconstructSigs:
     def __status(self, text):
         if self.verbose:
             sys.stdout.write('{}\n'.format(text))
-
 
     def __setup_subs_dict(self):
         """
