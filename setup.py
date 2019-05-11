@@ -1,7 +1,7 @@
 
 from setuptools import find_packages, Distribution
 from setuptools import setup
-
+import os
 def get_module_name(module):
     return module.__name__.split('.')[-1]
 
@@ -10,28 +10,34 @@ class BinaryDistribution(Distribution):
     def is_pure(self):
         return False
 #
-# def package_files(directory):
-#     import os
-#     paths = []
-#     for (path, directories, filenames) in os.walk(directory):
-#         for filename in filenames:
-#             if os.path.splitext(filename)[-1] != '.py':
-#                 paths.append(os.path.join(path, filename))
-#     return paths
-# extra_files = package_files('deconstructsigs')
+def package_files(directory):
+
+    paths = []
+    for (path, directories, filenames) in os.walk(directory):
+        for filename in filenames:
+            if os.path.splitext(filename)[-1] != '.py' and '.git' not in path and '.idea' not in path:
+                paths.append(os.path.join(path, filename))
+    return paths
+#extra_files = package_files('deconstruct_sigs')
+extra_files =package_files(os.path.dirname(os.path.realpath(__file__)))
+
+
+
 
 with open('requirements.txt', 'r') as requirements_file:
     install_requires = requirements_file.read().splitlines()
 setup(
     name='deconstructsigs',
-    version='0.3',
+    version='0.5',
     packages=find_packages(),
     license='https://github.com/Egors01/deconstruct_sigs',
-    author='egors',
+    author='egors_copied',
     author_email='none',
     distclass=BinaryDistribution,
     description='',
-    install_requires=install_requires
+    package_data={'': extra_files},
+    install_requires=install_requires,
+
 )
 
 #
