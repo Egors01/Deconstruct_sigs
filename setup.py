@@ -19,6 +19,9 @@ class BinaryDistribution(Distribution):
 #                 paths.append(os.path.join(path, filename))
 #     return paths
 # extra_files = package_files('deconstructsigs')
+
+with open('requirements.txt', 'r') as requirements_file:
+    install_requires = requirements_file.read().splitlines()
 setup(
     name='deconstructsigs',
     version='0.3',
@@ -27,7 +30,8 @@ setup(
     author='egors',
     author_email='none',
     distclass=BinaryDistribution,
-    description=''
+    description='',
+    install_requires=install_requires
 )
 
 #
