@@ -74,13 +74,13 @@ Output
 ------
 Output of **figures()**:
 * Tumor profile
-![Tumor Profile](deconstructsigs/example_plots/tumor_profile.png)
+![Tumor Profile](example_plots/tumor_profile.png)
 * Reconstructed tumor profile
-![Reconstructed Tumor Profile](deconstructsigs/example_plots/reconstructed_tumor_profile.png)
+![Reconstructed Tumor Profile](example_plots/reconstructed_tumor_profile.png)
 * Difference between original and reconstructed tumor profile
-![Difference Tumor Profile](deconstructsigs/example_plots/profile_differences.png)
+![Difference Tumor Profile](example_plots/profile_differences.png)
 * COSMIC signatures breakdown with explanations
-![Cosmic Signature Pie Chart](deconstructsigs/example_plots/cosmic_signature_pie_with_explanations.png)
+![Cosmic Signature Pie Chart](example_plots/cosmic_signature_pie_with_explanations.png)
 * COSMIC signatures breakdown
 <img src="deconstructSigs/example_plots/cosmic_signature_pie.png" alt="Cosmic Signature Pie Chart" height="400px">
 
