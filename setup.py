@@ -21,7 +21,7 @@ class BinaryDistribution(Distribution):
 # extra_files = package_files('deconstructsigs')
 setup(
     name='deconstructsigs',
-    version='0.2',
+    version='0.3',
     packages=find_packages(),
     license='https://github.com/Egors01/deconstruct_sigs',
     author='egors',
