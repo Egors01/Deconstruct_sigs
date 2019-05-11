@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-import module
+import sig_modules
 
 
 def main():
@@ -20,7 +20,7 @@ def main():
     vector = np.array(liver2_list )
     vector = vector / sum(vector)
     sig_df = pd.read_csv('/home/egors/Deconstruct_digs/deconstructSigs/data/signatures_probabilities.txt',sep='\t',usecols=np.arange(3,33))
-    ds = module(m96vector = vector, output_folder=
+    ds = sig_modules(m96vector = vector, output_folder=
     '/home/egors/Deconstruct_digs/deconstructSigs/outputs', analysis_handle = 'liver2', use_cosmic=True, signatures_df=sig_df, cutoff=0.03)
 
 

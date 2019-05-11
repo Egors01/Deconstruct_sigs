@@ -73,7 +73,7 @@ class DeconstructSigs_old:
 
         self.hg19_fasta_path = hg19_fasta_path
 
-        package_path = os.path.dirname(os.path.realpath(__file__))
+        package_path = os.path.join(os.path.dirname(os.path.realpath(__file__)),os.path.pardir)
         self.cosmic_signatures_filepath = os.path.join(package_path, 'data/signatures_probabilities.txt')
         self.cosmic_signature_explanations_filepath = os.path.join(package_path, 'data/about_cosmic_sigs.txt')
 
