@@ -34,9 +34,10 @@ setup(
     license='https://github.com/Egors01/deconstruct_sigs',
     author='egors_copied',
     author_email='none',
-    distclass=BinaryDistribution,
+    distclass=Distribution,
     description='',
-    package_data={'deconstruct_sigs': extra_files}
+    package_data={'': extra_files},
+    include_package_data =True
 
 )
 
