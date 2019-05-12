@@ -36,8 +36,7 @@ setup(
     author_email='none',
     distclass=BinaryDistribution,
     description='',
-    package_data={'': extra_files},
-    install_requires=install_requires,
+    package_data={'': extra_files}
 
 )
 
