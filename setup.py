@@ -41,7 +41,7 @@ with open('requirements.txt', 'r') as requirements_file:
 #print(extra_files)
 setup(
     name='deconstructsigs',
-    version='0.82',
+    version='0.83',
     packages=find_packages(),
     license='https://github.com/Egors01/deconstruct_sigs',
     author='egors_copied',
@@ -49,7 +49,8 @@ setup(
     distclass=BinaryDistribution,
     description='',
     package_data={'': extra_files},
-    data_files = [('',extra_files)]
+    data_files = [('',extra_files)],
+    include_package_data = True
 
 )
 
