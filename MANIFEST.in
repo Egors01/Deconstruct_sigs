@@ -1,1 +1,1 @@
-recursive-include  deconstruct_sigs *
+recursive-include   deconstruct_sigs/data/* ,  deconstruct_sigs/outputs/*
