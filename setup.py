@@ -36,8 +36,8 @@ setup(
     author_email='none',
     distclass=Distribution,
     description='',
-    package_data={'': extra_files},
-    include_package_data =True
+    #package_data={'': extra_files},
+    #include_package_data =True
 
 )
 
