@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from deconstruct_sigs.deconstructsigs import DeconstructSigs
+from deconsruct_sig.deconstruct_sigs import DeconstructSigs
 
 
 def main():
