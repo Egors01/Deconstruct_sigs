@@ -30,18 +30,31 @@ def package_files(directory):
             if os.path.splitext(filename)[-1] != '.py':
                 paths.append(os.path.join(path, filename))
     return paths
-#extra_files = package_files('deconstruct_sigs')
-extra_files = package_files(os.path.dirname(os.path.realpath(__file__)))
-#os.path.join(os.path.dirname(os.path.realpath(__file__)),'deconstruct_sig')
+
+def package_files_relative(root_dir):
+    file_set = set()
+    for dir_, _, files in os.walk(root_dir):
+        for file_name in files:
+            rel_dir = os.path.relpath(dir_, root_dir)
+            rel_file = os.path.join(rel_dir, file_name)
+            if os.path.splitext(file_name)[-1] != '.py':
+                file_set.add(rel_file)
+
+    return sorted(list(file_set))
+
+#extra_files = package_files(os.path.dirname(os.path.realpath(__file__)))
+isnpect_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                            "deconstruct_sigs")
+
+extra_files = package_files_relative(isnpect_dir)
 
 
-
-with open('requirements.txt', 'r') as requirements_file:
-    install_requires = requirements_file.read().splitlines()
+# with open('requirements.txt', 'r') as requirements_file:
+#     install_requires = requirements_file.read().splitlines()
 #print(extra_files)
 setup(
     name='deconstructsigs',
-    version='0.83',
+    version='0.84',
     packages=find_packages(),
     license='https://github.com/Egors01/deconstruct_sigs',
     author='egors_copied',
@@ -49,7 +62,7 @@ setup(
     distclass=BinaryDistribution,
     description='',
     package_data={'': extra_files},
-    #data_files = [('',extra_files)],
+    data_files = [('',extra_files)],
     include_package_data = True
 
 )
