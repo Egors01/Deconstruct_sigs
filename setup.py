@@ -49,7 +49,7 @@ setup(
     distclass=BinaryDistribution,
     description='',
     package_data={'': extra_files},
-    data_files = [('',extra_files)],
+    #data_files = [('',extra_files)],
     include_package_data = True
 
 )
