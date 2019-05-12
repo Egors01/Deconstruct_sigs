@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from deconsruct_sig.modules import DeconstructSigs_old
+from deconsruct_sigs.modules import DeconstructSigs_old
 
 
 def main():
