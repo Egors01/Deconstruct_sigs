@@ -29,7 +29,7 @@ with open('requirements.txt', 'r') as requirements_file:
 #print(extra_files)
 setup(
     name='deconstructsigs',
-    version='0.5',
+    version='0.6',
     packages=find_packages(),
     license='https://github.com/Egors01/deconstruct_sigs',
     author='egors_copied',
