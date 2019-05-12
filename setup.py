@@ -19,15 +19,14 @@ def package_files(directory):
                 paths.append(os.path.join(path, filename))
     return paths
 #extra_files = package_files('deconstruct_sigs')
-extra_files =package_files(os.path.dirname(os.path.realpath(__file__)))
-
+extra_files = package_files(os.path.dirname(os.path.realpath(__file__)))
+#os.path.join(os.path.dirname(os.path.realpath(__file__)),'deconstruct_sig')
 
 
 
 with open('requirements.txt', 'r') as requirements_file:
     install_requires = requirements_file.read().splitlines()
-print (find_packages)
-print(extra_files())
+#print(extra_files)
 setup(
     name='deconstructsigs',
     version='0.5',
