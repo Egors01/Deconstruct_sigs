@@ -36,7 +36,7 @@ setup(
     author_email='none',
     distclass=BinaryDistribution,
     description='',
-    package_data={'': extra_files}
+    package_data={'deconstruct_sigs': extra_files}
 
 )
 
