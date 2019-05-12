@@ -1,1 +1,1 @@
-recursive-include   deconstruct_sig/*
+recursive-include  *

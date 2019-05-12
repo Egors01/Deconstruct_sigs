@@ -26,7 +26,8 @@ extra_files =package_files(os.path.dirname(os.path.realpath(__file__)))
 
 with open('requirements.txt', 'r') as requirements_file:
     install_requires = requirements_file.read().splitlines()
-
+print (find_packages)
+print(extra_files())
 setup(
     name='deconstructsigs',
     version='0.5',
@@ -36,7 +37,7 @@ setup(
     author_email='none',
     distclass=Distribution,
     description='',
-    #package_data={'': extra_files},
+    package_data={'': extra_files},
     include_package_data =True
 
 )
