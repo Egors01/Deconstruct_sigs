@@ -54,7 +54,7 @@ extra_files = package_files_relative(isnpect_dir)
 #print(extra_files)
 setup(
     name='deconstructsigs',
-    version='0.84',
+    version='0.85',
     packages=find_packages(),
     license='https://github.com/Egors01/deconstruct_sigs',
     author='egors_copied',
@@ -62,7 +62,7 @@ setup(
     distclass=BinaryDistribution,
     description='',
     package_data={'': extra_files},
-    data_files = [('',extra_files)],
+    #data_files = [('',extra_files)],
     include_package_data = True
 
 )
