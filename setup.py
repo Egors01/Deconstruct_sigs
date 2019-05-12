@@ -18,7 +18,7 @@ def data_files(directory):
         for directory in directories:
             data_files_dict[directory] = []
             for filename in filenames:
-                if os.path.splitext(filename)[-1] != '.py' and '.git' not in path and '.idea' not in path:
+                if os.path.splitext(filename)[-1] != '.py':
                     data_files_dict[directory].append(os.path.join(path, filename))
     return data_files_dict
 
@@ -27,7 +27,7 @@ def package_files(directory):
     paths = []
     for (path, directories, filenames) in os.walk(directory):
         for filename in filenames:
-            if os.path.splitext(filename)[-1] != '.py' and '.git' not in path and '.idea' not in path:
+            if os.path.splitext(filename)[-1] != '.py':
                 paths.append(os.path.join(path, filename))
     return paths
 #extra_files = package_files('deconstruct_sigs')
@@ -41,15 +41,14 @@ with open('requirements.txt', 'r') as requirements_file:
 #print(extra_files)
 setup(
     name='deconstructsigs',
-    version='0.81',
+    version='0.82',
     packages=find_packages(),
     license='https://github.com/Egors01/deconstruct_sigs',
     author='egors_copied',
     author_email='none',
-    distclass=Distribution,
+    distclass=BinaryDistribution,
     description='',
     package_data={'': extra_files},
-    include_package_data =True,
     data_files = [('',extra_files)]
 
 )
