@@ -29,15 +29,15 @@ with open('requirements.txt', 'r') as requirements_file:
 #print(extra_files)
 setup(
     name='deconstructsigs',
-    version='0.6',
+    version='0.7',
     packages=find_packages(),
     license='https://github.com/Egors01/deconstruct_sigs',
     author='egors_copied',
     author_email='none',
     distclass=Distribution,
     description='',
-    #package_data={'': extra_files},
-    #include_package_data =True
+    package_data={'': extra_files},
+    include_package_data =True
 
 )
 
