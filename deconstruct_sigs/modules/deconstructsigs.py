@@ -135,7 +135,7 @@ class DeconstructSigs:
 
         w = self.__seed_weights(T, self.S, ignorable_indices=ignorable_indices)
 
-        error_diff = math.inf
+        error_diff = float('inf')
         error_threshold = self.threshold
         while error_diff > error_threshold:
             iteration = iteration + 1
@@ -304,7 +304,7 @@ class DeconstructSigs:
 
         # 1 * num signatures vector with values preset to infinity
         new_squared_errors = np.empty(num_sigs, )
-        new_squared_errors.fill(math.inf)
+        new_squared_errors.fill(float('inf'))
 
         # Only consider adjusting the weights which are allowed to change
         for i in changeable_indices:
@@ -346,7 +346,7 @@ class DeconstructSigs:
 
         num_sigs = len(signatures[0])
         ss_errors = np.empty(num_sigs, )
-        ss_errors.fill(math.inf)
+        ss_errors.fill(float('inf'))
         for i in range(num_sigs):
             if i not in ignorable_indices:
                 tmp_weights = np.zeros((num_sigs,))
